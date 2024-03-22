@@ -10,7 +10,11 @@ public class FinalProject {
     private static final int ID_TYPE = 0;
     private static final int ID_NUMBER = 1;
     private static final int FIRST_NAME = 2;
-    private static final int EMAIL = 6;
+    private static final int LAST_NAME = 3;
+    private static final int ADDRESS = 4;
+    private static final int CITY = 5;
+    private static final int TEL = 6;
+    private static final int EMAIL = 7;
     private static final int PASSWORD = 8;
 
     private static List<String[]> users = new ArrayList<>();
@@ -139,7 +143,11 @@ public class FinalProject {
         user[ID_TYPE] = idType;
         user[ID_NUMBER] = idNumber;
         user[FIRST_NAME] = firstName;
+        user[LAST_NAME] = lastName;
         user[EMAIL] = email;
+        user[ADDRESS] = residentialAddress;
+        user[CITY] = cityOfResidence;
+        user[TEL] = contactPhoneNumber;
         user[PASSWORD] = password;
 
         users.add(user);
