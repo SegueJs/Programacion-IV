@@ -9,8 +9,11 @@ public class FinalProject {
     private static final int ID_TYPE = 0;
     private static final int ID_NUMBER = 1;
     private static final int FIRST_NAME = 2;
+    private static final int ADDRESS = 3;
+    private static final int CITY = 4;
+    private static final int TEL = 5;
     private static final int EMAIL = 6;
-    private static final int PASSWORD = 8;
+    private static final int PASSWORD = 7;
 
     private static java.util.List<String[]> users = new java.util.ArrayList<>();
 
@@ -175,12 +178,15 @@ public class FinalProject {
     }
 
     public static void registerUser(String idType, String idNumber, String firstName, String email, String residentialAddress, String cityOfResidence, String contactPhoneNumber, String password) {
-        String[] user = new String[10];
+        String[] user = new String[8];
         user[ID_TYPE] = idType;
         user[ID_NUMBER] = idNumber;
         user[FIRST_NAME] = firstName;
         user[EMAIL] = email;
         user[PASSWORD] = password;
+        user[CITY] = cityOfResidence;
+        user[ADDRESS] = residentialAddress;
+        user[TEL] = contactPhoneNumber;
 
         users.add(user);
     }
