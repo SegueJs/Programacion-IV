@@ -1,67 +1,204 @@
-package src.vista;
-
+package vista;
 import javax.swing.*;
-import java.awt.*;
+import controlador.RegisterControl;
+import modelo.User;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class RegisterFrame extends JFrame {
-    private JTextField idTypeField, idNumberField, firstNameField, lastNameField, emailField, residentialAddressField, cityOfResidenceField, contactPhoneNumberField;
-    private JPasswordField passwordField, confirmPasswordField;
-    private JButton backButton, registerButton;
+  private JTextField idTypeField;
+  private JTextField idNumberField;
+  private JTextField firstNameField;
+  private JTextField lastNameField;
+  private JTextField emailField;
+  private JTextField addressField;
+  private JTextField cityField;
+  private JTextField phoneField;
+  private JPasswordField passwordField;
+  private JPasswordField confirmPasswordField;
 
-    public RegisterFrame() {
-        setTitle("Register");
-        setSize(500, 600);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new GridLayout(12, 2));
+  public RegisterFrame() {
+    super("Registro de usuario - MyHotel");
 
-        idTypeField = new JTextField();
-        idNumberField = new JTextField();
-        firstNameField = new JTextField();
-        lastNameField = new JTextField();
-        emailField = new JTextField();
-        residentialAddressField = new JTextField();
-        cityOfResidenceField = new JTextField();
-        contactPhoneNumberField = new JTextField();
-        passwordField = new JPasswordField();
-        confirmPasswordField = new JPasswordField();
-        backButton = new JButton("Back");
-        registerButton = new JButton("Register");
+    JPanel registrationPanel = new JPanel();
+    GroupLayout layout = new GroupLayout(registrationPanel);
+    registrationPanel.setLayout(layout);
+    layout.setAutoCreateGaps(true);
+    layout.setAutoCreateContainerGaps(true);
 
-        add(new JLabel("Tipo de identificacion (CC, TI, PA):"));
-        add(idTypeField);
-        add(new JLabel("Numero de identificacion:"));
-        add(idNumberField);
-        add(new JLabel("Nombre:"));
-        add(firstNameField);
-        add(new JLabel("Apellido:"));
-        add(lastNameField);
-        add(new JLabel("Email:"));
-        add(emailField);
-        add(new JLabel("Direccion:"));
-        add(residentialAddressField);
-        add(new JLabel("Ciudad de residencia:"));
-        add(cityOfResidenceField);
-        add(new JLabel("Numero de contacto:"));
-        add(contactPhoneNumberField);
-        add(new JLabel("Contraseña:"));
-        add(passwordField);
-        add(new JLabel("Confirmar contraseña:"));
-        add(confirmPasswordField);
-        add(backButton);
-        add(registerButton);
+    JLabel idTypeLabel = new JLabel("Tipo de Identificación:");
+    JLabel idNumberLabel = new JLabel("Número de Identificación:");
+    JLabel firstNameLabel = new JLabel("Nombres:");
+    JLabel lastNameLabel = new JLabel("Apellidos:");
+    JLabel emailLabel = new JLabel("Correo Electrónico:");
+    JLabel addressLabel = new JLabel("Dirección de Residencia:");
+    JLabel cityLabel = new JLabel("Ciudad de Residencia:");
+    JLabel phoneLabel = new JLabel("Teléfono de Contacto:");
+    JLabel passwordLabel = new JLabel("Contraseña:");
+    JLabel confirmPasswordLabel = new JLabel("Confirmar Contraseña:");
+    idTypeField = new JTextField(20);
+    idNumberField = new JTextField(20);
+    firstNameField = new JTextField(20);
+    lastNameField = new JTextField(20);
+    emailField = new JTextField(20);
+    addressField = new JTextField(20);
+    cityField = new JTextField(20);
+    phoneField = new JTextField(20);
+    passwordField = new JPasswordField(20);
+    confirmPasswordField = new JPasswordField(20);
+
+    JButton registerButton = new JButton("Registrar");
+
+    registerButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String idType = idTypeField.getText();
+        String idNumber = idNumberField.getText();
+        String firstName = firstNameField.getText();
+        String lastName = lastNameField.getText();
+        String email = emailField.getText();
+        String address = addressField.getText();
+        String city = cityField.getText();
+        String phone = phoneField.getText();
+        String password = new String(passwordField.getPassword());
+        String confirmPassword = new String(confirmPasswordField.getPassword());
+
+        if (idType.isEmpty() || idNumber.isEmpty() || firstName.isEmpty() || lastName.isEmpty() ||
+            email.isEmpty() || address.isEmpty() || city.isEmpty() || phone.isEmpty() ||
+            password.isEmpty() || confirmPassword.isEmpty()) {
+          JOptionPane.showMessageDialog(RegisterFrame.this, "Por favor, complete todos los campos", "Campos Vacíos",
+              JOptionPane.WARNING_MESSAGE);
+          return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+          JOptionPane.showMessageDialog(RegisterFrame.this, "Las contraseñas no coinciden.", "Error de registro",
+              JOptionPane.ERROR_MESSAGE);
+          return;
+        }
+
+        if (!tipoIdValido(idType) || !numeroIdValido(idNumber) || !correoValido(email)) {
+          return;
+        }
+
+        User newUser = new User(idType, idNumber, firstName, lastName, email, address, city, phone, password);
+        RegisterControl.registerUser(newUser);
+        JOptionPane.showMessageDialog(RegisterFrame.this, "Usuario registrado satisfactoriamente", "Registro Exitoso",
+            JOptionPane.INFORMATION_MESSAGE);
+        dispose();
+        new LoginFrame();
+      }
+    });
+
+    JButton loginButton = new JButton("Iniciar Sesión");
+    loginButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        dispose();
+        new LoginFrame();
+      }
+    });
+
+    GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
+    hGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+        .addComponent(idTypeLabel)
+        .addComponent(idNumberLabel)
+        .addComponent(firstNameLabel)
+        .addComponent(lastNameLabel)
+        .addComponent(emailLabel)
+        .addComponent(addressLabel)
+        .addComponent(cityLabel)
+        .addComponent(phoneLabel)
+        .addComponent(passwordLabel)
+        .addComponent(confirmPasswordLabel));
+    hGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        .addComponent(idTypeField)
+        .addComponent(idNumberField)
+        .addComponent(firstNameField)
+        .addComponent(lastNameField)
+        .addComponent(emailField)
+        .addComponent(addressField)
+        .addComponent(cityField)
+        .addComponent(phoneField)
+        .addComponent(passwordField)
+        .addComponent(confirmPasswordField)
+        .addComponent(registerButton)
+        .addComponent(loginButton));
+    layout.setHorizontalGroup(hGroup);
+
+    GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
+    vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(idTypeLabel)
+        .addComponent(idTypeField));
+    vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(idNumberLabel)
+        .addComponent(idNumberField));
+    vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(firstNameLabel)
+        .addComponent(firstNameField));
+    vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(lastNameLabel)
+        .addComponent(lastNameField));
+    vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(emailLabel)
+        .addComponent(emailField));
+    vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(addressLabel)
+        .addComponent(addressField));
+    vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(cityLabel)
+        .addComponent(cityField));
+    vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(phoneLabel)
+        .addComponent(phoneField));
+    vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(passwordLabel)
+        .addComponent(passwordField));
+    vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(confirmPasswordLabel)
+        .addComponent(confirmPasswordField));
+    vGroup.addComponent(registerButton);
+    vGroup.addComponent(loginButton);
+    layout.setVerticalGroup(vGroup);
+
+    add(registrationPanel);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    pack();
+    setLocationRelativeTo(null);
+    setVisible(true);
+  }
+
+  private boolean tipoIdValido(String tipoId) {
+    if (!(tipoId.equals("CC") || tipoId.equals("TI") || tipoId.equals("PA"))) {
+      JOptionPane.showMessageDialog(this, "Identificación inválida. Debe ser CC, TI o PA.", "Error de registro",
+          JOptionPane.ERROR_MESSAGE);
+      return false;
     }
+    return true;
+  }
 
-    public JTextField getIdTypeField() { return idTypeField; }
-    public JTextField getIdNumberField() { return idNumberField; }
-    public JTextField getFirstNameField() { return firstNameField; }
-    public JTextField getLastNameField() { return lastNameField; }
-    public JTextField getEmailField() { return emailField; }
-    public JTextField getResidentialAddressField() { return residentialAddressField; }
-    public JTextField getCityOfResidenceField() { return cityOfResidenceField; }
-    public JTextField getContactPhoneNumberField() { return contactPhoneNumberField; }
-    public JPasswordField getPasswordField() { return passwordField; }
-    public JPasswordField getConfirmPasswordField() { return confirmPasswordField; }
-    public JButton getBackButton() { return backButton; }
-    public JButton getRegisterButton() { return registerButton; }
+  private boolean numeroIdValido(String numeroId) {
+    if (!numeroId.matches("\\d+")) {
+      JOptionPane.showMessageDialog(this, "Número de identificación inválido. Debe ser un número.", "Error de registro",
+          JOptionPane.ERROR_MESSAGE);
+      return false;
+    }
+    return true;
+  }
+
+  private boolean correoValido(String correo) {
+    String patronCorreo = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    Pattern patron = Pattern.compile(patronCorreo);
+    Matcher coincidencia = patron.matcher(correo);
+    if (!coincidencia.matches()) {
+      JOptionPane.showMessageDialog(this, "Formato de correo inválido.", "Error de registro",
+          JOptionPane.ERROR_MESSAGE);
+      return false;
+    }
+    return true;
+  }
 }

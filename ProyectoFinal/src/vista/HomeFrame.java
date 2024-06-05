@@ -1,59 +1,72 @@
-package src.vista;
-
+package vista;
 import javax.swing.*;
-import java.awt.*;
+
+
 
 public class HomeFrame extends JFrame {
-    private JComboBox<String> reservationsDropdown;
-    private JComboBox<String> roomsDropdown;
-    private JComboBox<String> usersDropdown;
+  public HomeFrame() {
+    super("Inicio de sesión - MyHotel");
 
-    public HomeFrame(String role) {
-        setTitle("Home - " + role);
-        setSize(400, 200);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new FlowLayout());
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setSize(600, 400);
+    setLocationRelativeTo(null);
 
-        String[] adminReservationsOptions = {"Ver Reservaciones", "Modificar Reservacion", "Cancelar Reservacion"};
-        String[] clientReservationsOptions = {"Hacer Reservacion", "Ver mis Reservaciones"};
-        String[] adminRoomsOptions = {"Agregar Cuarto", "Modificar Cuarto", "Remover Cuarto"};
-        String[] adminUsersOptions = {"Agregar Usuario", "Modificar Usuario", "Remover Usuario"};
+    JMenuBar menuBar = new JMenuBar();
 
-        reservationsDropdown = new JComboBox<>(role.equals("admin") ? adminReservationsOptions : clientReservationsOptions);
-        add(new JLabel("Reservaciones:"));
-        add(reservationsDropdown);
+    JMenu bookingsMenu = new JMenu("Reservas");
+    JMenuItem makeBookingItem = new JMenuItem("Realizar reserva");
+    JMenuItem modifyBookingItem = new JMenuItem("Modificar reserva");
+    JMenuItem cancelBookingItem = new JMenuItem("Cancelar reserva");
+    JMenuItem bookingsHistoryItem = new JMenuItem("Historial de reservas");
 
-        if (role.equals("admin")) {
-            roomsDropdown = new JComboBox<>(adminRoomsOptions);
-            add(new JLabel("Cuartos:"));
-            add(roomsDropdown);
+    makeBookingItem.addActionListener(e -> {
+      new MakeReservationFrame();
+    });
 
-            usersDropdown = new JComboBox<>(adminUsersOptions);
-            add(new JLabel("Usuarios:"));
-            add(usersDropdown);
-        }
+    modifyBookingItem.addActionListener(e -> {
+      new EditReservationFrame();
+    });
 
-        reservationsDropdown.addActionListener(e -> handleSelection(reservationsDropdown.getSelectedItem().toString(), "Reservaciones"));
-        if (role.equals("admin")) {
-            roomsDropdown.addActionListener(e -> handleSelection(roomsDropdown.getSelectedItem().toString(), "Cuartos"));
-            usersDropdown.addActionListener(e -> handleSelection(usersDropdown.getSelectedItem().toString(), "Usuarios"));
-        }
-    }
+    cancelBookingItem.addActionListener(e -> {
+      new CancelReservationFrame();
+    });
 
-    private void handleSelection(String option, String category) {
-        JOptionPane.showMessageDialog(this, "Opcion seleccionada: " + option);
-    }
+    bookingsHistoryItem.addActionListener(e -> {
+      new ReservationHistoryFrame();
+    });
 
-    public JComboBox<String> getReservationsDropdown() {
-        return reservationsDropdown;
-    }
+    bookingsMenu.add(makeBookingItem);
+    bookingsMenu.add(modifyBookingItem);
+    bookingsMenu.add(cancelBookingItem);
+    bookingsMenu.add(bookingsHistoryItem);
 
-    public JComboBox<String> getRoomsDropdown() {
-        return roomsDropdown;
-    }
+    JMenu roomMenu = new JMenu("Habitaciones");
+    JMenuItem viewRoomItem = new JMenuItem("Ver detalles de habitación");
+    JMenuItem searchRoomItem = new JMenuItem("Buscar Habitación");
 
-    public JComboBox<String> getUsersDropdown() {
-        return usersDropdown;
-    }
+    viewRoomItem.addActionListener(e -> {
+      new SeeRoomFrame();
+    });
+
+    searchRoomItem.addActionListener(e -> {
+      new SearchRoomFrame();
+    });
+
+    roomMenu.add(viewRoomItem);
+    roomMenu.add(searchRoomItem);
+
+    JMenuItem logoutItem = new JMenuItem("Cerrar sesión");
+    logoutItem.addActionListener(e -> {
+      dispose();
+      new LoginFrame();
+    });
+
+    menuBar.add(bookingsMenu);
+    menuBar.add(roomMenu);
+    menuBar.add(logoutItem);
+
+    setJMenuBar(menuBar);
+
+    setVisible(true);
+  }
 }
