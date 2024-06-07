@@ -17,9 +17,9 @@ public class LoginFrame extends JFrame {
         super("Inicio de Sesión - MyHotel");
 
         imageUrls = Arrays.asList(
-            "https://i.pinimg.com/originals/06/a8/5b/06a85b703ccc50fcc2214bac56214f48.gif",
-            "https://i.pinimg.com/originals/cb/10/99/cb109999e76292b5288868a61c043b90.gif",
-            "https://i.redd.it/1asyzovvrn8a1.gif" // URL de un GIF
+            "https://steamuserimages-a.akamaihd.net/ugc/848216496686774316/558D976DFAF9B99D3AB0619E89CAD7622A32B06D/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true",
+            "https://preview.redd.it/383dze7sh4s81.gif?width=640&crop=smart&auto=webp&s=ad1e736c904eb5b028d31ab92bb476e4ac4b1bc7",
+            "https://preview.redd.it/e3ju9yve28971.gif?width=500&auto=webp&s=07950651adc2077b4e11b536f67e9a8a8b1cf22c"
         );
         currentImageIndex = 0;
 
